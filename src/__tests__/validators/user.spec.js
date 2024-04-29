@@ -20,17 +20,17 @@ describe('user-profile-update-validation', () => {
 	const registerData = {
 		aff_id: '',
 		credit_rate: '100',
-		txtname: 'testuser',
-		txtpass: '123452',
-		txtpass_repeat: '123452',
-		txtphone: '08412345672',
-		txtuser: 'testuser@gmail.com'
+		name: 'testuser',
+		pass: '123452',
+		pass_repeat: '123452',
+		phone: '08412345672',
+		user: 'testuser@gmail.com'
 	}
 
 	const body = {
-		txtuser: 'testuser@gmail.com',
-		txtname: 'updateuser',
-		txtphone: '08412345673'
+		user: 'testuser@gmail.com',
+		name: 'updateuser',
+		phone: '08412345673'
 	}
 
 	const request = { body }
@@ -51,17 +51,17 @@ describe('user-profile-update-validation', () => {
 
 	describe('username validation', () => {
 		afterEach(() => {
-			body.txtuser = 'testuser@gmail.com'
+			body.user = 'testuser@gmail.com'
 		})
 
-		test('should call response method when null to txtuser', async () => {
-			body.txtuser = null
+		test('should call response method when null to user', async () => {
+			body.user = null
 
 			await validator(UserUpdateSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
-		test('should call next method when valid value to txtuser', async () => {
+		test('should call next method when valid value to user', async () => {
 			await validator(UserUpdateSchema)(request, response, next)
 			expect(next).toBeCalled()
 		})
@@ -69,73 +69,73 @@ describe('user-profile-update-validation', () => {
 
 	describe('fullname validation', () => {
 		afterEach(() => {
-			body.txtname = 'updateuser'
+			body.name = 'updateuser'
 		})
 
-		test('should call response method when null to txtname ', async () => {
-			body.txtname = null
+		test('should call response method when null to name ', async () => {
+			body.name = null
 
 			await validator(UserUpdateSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
-		test('should call response method when empty string to txtname ', async () => {
-			body.txtname = ''
+		test('should call response method when empty string to name ', async () => {
+			body.name = ''
 
 			await validator(UserUpdateSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
-		test('should call response method when only 1 character to txtname ', async () => {
-			body.txtname = 'a'
+		test('should call response method when only 1 character to name ', async () => {
+			body.name = 'a'
 
 			await validator(UserUpdateSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
-		test('should call response method when string with special character to txtname ', async () => {
-			body.txtname = 'testuser@'
+		test('should call response method when string with special character to name ', async () => {
+			body.name = 'testuser@'
 
 			await validator(UserUpdateSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 	})
 
-	describe('txtphone validation', () => {
+	describe('phone validation', () => {
 		afterEach(() => {
-			body.txtphone = '08412345673'
+			body.phone = '08412345673'
 		})
 
 		test('should call response method when phone number with null', async () => {
-			body.txtphone = null
+			body.phone = null
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
 		test('should call response method when phone number with less than 8 digit', async () => {
-			body.txtphone = '084123'
+			body.phone = '084123'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
 		test('should call response method when phone number with more than 14 digit', async () => {
-			body.txtphone = '0841231213324343434'
+			body.phone = '0841231213324343434'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
 		test('should call response method when phone number with an alphabet', async () => {
-			body.txtphone = '084123121a'
+			body.phone = '084123121a'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
 		test('should call response method when phone number start with +', async () => {
-			body.txtphone = '084123121a'
+			body.phone = '084123121a'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
@@ -209,11 +209,11 @@ describe('user-register-validation', () => {
 	const body = {
 		aff_id: '',
 		credit_rate: '100',
-		txtname: 'testuser',
-		txtpass: '123452',
-		txtpass_repeat: '123452',
-		txtphone: '08412345672',
-		txtuser: 'testuser@gmail.com'
+		name: 'testuser',
+		pass: '123452',
+		pass_repeat: '123452',
+		phone: '08412345672',
+		user: 'testuser@gmail.com'
 	}
 
 	const request = { body }
@@ -249,18 +249,18 @@ describe('user-register-validation', () => {
 
 	describe('username validation', () => {
 		afterEach(() => {
-			body.txtuser = 'testuser@gmail.com'
+			body.user = 'testuser@gmail.com'
 		})
 
-		test('should call response method when null to txtuser ', async () => {
-			body.txtuser = null
+		test('should call response method when null to user ', async () => {
+			body.user = null
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
-		test('should call response method when empty string to txtuser ', async () => {
-			body.txtuser = ''
+		test('should call response method when empty string to user ', async () => {
+			body.user = ''
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
@@ -269,32 +269,32 @@ describe('user-register-validation', () => {
 
 	describe('fullname validation', () => {
 		afterEach(() => {
-			body.txtname = 'testuser'
+			body.name = 'testuser'
 		})
 
-		test('should call response method when null to txtname ', async () => {
-			body.txtname = null
+		test('should call response method when null to name ', async () => {
+			body.name = null
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
-		test('should call response method when empty string to txtname ', async () => {
-			body.txtname = ''
+		test('should call response method when empty string to name ', async () => {
+			body.name = ''
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
-		test('should call response method when only 1 character to txtname ', async () => {
-			body.txtname = 'a'
+		test('should call response method when only 1 character to name ', async () => {
+			body.name = 'a'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
-		test('should call response method when string with special character to txtname ', async () => {
-			body.txtname = 'testuser@'
+		test('should call response method when string with special character to name ', async () => {
+			body.name = 'testuser@'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
@@ -303,32 +303,32 @@ describe('user-register-validation', () => {
 
 	describe('password validation', () => {
 		afterEach(() => {
-			body.txtpass = '123452'
+			body.pass = '123452'
 		})
 
-		test('should call response method when null to txtpass ', async () => {
-			body.txtpass = null
+		test('should call response method when null to pass ', async () => {
+			body.pass = null
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
-		test('should call response method when empty string to txtpass ', async () => {
-			body.txtpass = ''
+		test('should call response method when empty string to pass ', async () => {
+			body.pass = ''
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
-		test('should call response method when a string with space to txtpass ', async () => {
-			body.txtpass = '1234 5678'
+		test('should call response method when a string with space to pass ', async () => {
+			body.pass = '1234 5678'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
-		test('should call response method when only 5 characters to txtpass ', async () => {
-			body.txtpass = null
+		test('should call response method when only 5 characters to pass ', async () => {
+			body.pass = null
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
@@ -337,45 +337,45 @@ describe('user-register-validation', () => {
 
 	describe('repeat passwrod validation', () => {
 		afterEach(() => {
-			body.txtpass_repeat = '123452'
+			body.pass_repeat = '123452'
 		})
 
-		test('should call response method when different txtpass_repeat from txtpass ', async () => {
-			body.txtpass_repeat = '254321'
+		test('should call response method when different pass_repeat from pass ', async () => {
+			body.pass_repeat = '254321'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 	})
 
-	describe('txtphone validation', () => {
+	describe('phone validation', () => {
 		afterEach(() => {
-			body.txtphone = '08412345672'
+			body.phone = '08412345672'
 		})
 
 		test('should call response method when phone number with less than 8 digit', async () => {
-			body.txtphone = '084123'
+			body.phone = '084123'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
 		test('should call response method when phone number with more than 14 digit', async () => {
-			body.txtphone = '0841231213324343434'
+			body.phone = '0841231213324343434'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
 		test('should call response method when phone number with an alphabet', async () => {
-			body.txtphone = '084123121a'
+			body.phone = '084123121a'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)
 		})
 
 		test('should call response method when phone number start with +', async () => {
-			body.txtphone = '084123121a'
+			body.phone = '084123121a'
 
 			await validator(UserRegisterSchema)(request, response, next)
 			expect(response.status).toBeCalledWith(400)

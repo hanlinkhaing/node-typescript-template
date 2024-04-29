@@ -8,11 +8,11 @@ export interface IUser {
 }
 
 export interface IUserRegiser {
-	txtuser: string
-	txtpass: string
-	txtpass_repeat: string
-	txtname: string
-	txtphone: string
+	user: string
+	pass: string
+	pass_repeat: string
+	name: string
+	phone: string
 }
 
 export interface IUserLogin {
@@ -27,9 +27,9 @@ export interface IAuthUser {
 }
 
 export interface IUserUpdateData {
-	txtuser: string
-	txtname: string
-	txtphone: string
+	user: string
+	name: string
+	phone: string
 }
 
 export interface IUserUpdate {

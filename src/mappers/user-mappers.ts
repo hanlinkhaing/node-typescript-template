@@ -18,12 +18,12 @@ export function updateDataToUserUpdateMapper(): Mapper {
 		'IUserUpdate',
 		forMember(
 			d => d.fullname,
-			mapFrom(s => s.txtname)
+			mapFrom(s => s.name)
 		),
 		forMember(
 			d => d.phone,
 			mapFrom(s => {
-				return s.txtphone?.trim()
+				return s.phone?.trim()
 			})
 		)
 	)
@@ -60,25 +60,25 @@ export function userRegisterToUserMapper(): Mapper {
 		'IUser',
 		forMember(
 			d => d.username,
-			mapFrom(s => s.txtuser?.trim())
+			mapFrom(s => s.user?.trim())
 		),
 		forMember(
 			d => d.phone,
 			mapFrom(s => {
-				return s.txtphone?.trim()
+				return s.phone?.trim()
 			})
 		),
 		forMember(
 			d => d.fullname,
-			mapFrom(s => s.txtname?.trim())
+			mapFrom(s => s.name?.trim())
 		),
 		forMember(
 			d => d.email,
-			mapFrom(s => s.txtuser?.trim())
+			mapFrom(s => s.user?.trim())
 		),
 		forMember(
 			d => d.password,
-			mapFrom(s => s.txtpass)
+			mapFrom(s => s.pass)
 		),
 		forMember(
 			d => d.str,

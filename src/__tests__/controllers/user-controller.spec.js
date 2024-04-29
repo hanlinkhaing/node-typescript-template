@@ -26,11 +26,11 @@ const next = vi.fn()
 
 describe('update controller', () => {
 	beforeEach(() => {
-		request.body.txtuser = 'testuser'
+		request.body.user = 'testuser'
 	})
 
-	test("should call next function with error when body's txtuser and auth's username are not same.", async () => {
-		request.body.txtuser = 'updateuser'
+	test("should call next function with error when body's user and auth's username are not same.", async () => {
+		request.body.user = 'updateuser'
 
 		await updateUserProfile(request, response, next)
 

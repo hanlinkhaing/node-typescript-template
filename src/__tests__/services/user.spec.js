@@ -22,11 +22,11 @@ const userData = {
 let registerPayload = {
 	aff_id: '',
 	credit_rate: '100',
-	txtname: 'testuser',
-	txtpass: '123452',
-	txtpass_repeat: '123452',
-	txtphone: '08412345672',
-	txtuser: 'testuser@gmail.com'
+	name: 'testuser',
+	pass: '123452',
+	pass_repeat: '123452',
+	phone: '08412345672',
+	user: 'testuser@gmail.com'
 }
 
 let mongoServer
@@ -44,21 +44,21 @@ describe('updateUser(data: IUserUpdateData)', () => {
 	})
 
 	beforeEach(async () => {
-		await UserModel.findOneAndDelete({ username: registerPayload.txtuser })
+		await UserModel.findOneAndDelete({ username: registerPayload.user })
 		await createUser(registerPayload)
 	})
 
 	const updateData = {
-		txtuser: 'testuser@gmail.com',
-		txtphone: '213454566',
-		txtname: 'PikaPika3'
+		user: 'testuser@gmail.com',
+		phone: '213454566',
+		name: 'PikaPika3'
 	}
 
 	test('should return updated user data when executable data is given', async () => {
 		const user = await updateUser(updateData)
 
-		expect(user.fullname).toBe(updateData.txtname)
-		expect(user.phone).toEqual(updateData.txtphone)
+		expect(user.fullname).toBe(updateData.name)
+		expect(user.phone).toEqual(updateData.phone)
 	})
 })
 
@@ -116,7 +116,7 @@ describe('login(payload: IAuthUser)', () => {
 	})
 
 	test('should throw error when user not existed', async () => {
-		await UserModel.findOneAndDelete({ username: registerPayload.txtuser })
+		await UserModel.findOneAndDelete({ username: registerPayload.user })
 
 		try {
 			await login(userData)
@@ -140,7 +140,7 @@ describe('refreshAccessToken(username: string)', () => {
 	})
 
 	test('should return valid token string when user existed', async () => {
-		const token = await refreshAccessToken(registerPayload.txtuser)
+		const token = await refreshAccessToken(registerPayload.user)
 
 		expect(token).toBeDefined()
 
@@ -150,10 +150,10 @@ describe('refreshAccessToken(username: string)', () => {
 	})
 
 	test('should throw error when user not existed', async () => {
-		await UserModel.findOneAndDelete({ username: registerPayload.txtuser })
+		await UserModel.findOneAndDelete({ username: registerPayload.user })
 
 		try {
-			await refreshAccessToken(registerPayload.txtuser)
+			await refreshAccessToken(registerPayload.user)
 		} catch (err) {
 			expect(err.message).toEqual('Auth user not found.')
 		}
@@ -174,15 +174,15 @@ describe('checkUserExists(username: string)', () => {
 	})
 
 	test('username already existed and should true', async () => {
-		const result = await checkUserExists(registerPayload.txtuser)
+		const result = await checkUserExists(registerPayload.user)
 
 		expect(result).toBeTruthy
 	})
 
 	test("username doesn't exist and should return false", async () => {
-		await UserModel.findOneAndDelete({ username: registerPayload.txtuser })
+		await UserModel.findOneAndDelete({ username: registerPayload.user })
 
-		const result = await checkUserExists(registerPayload.txtuser)
+		const result = await checkUserExists(registerPayload.user)
 
 		expect(result).toBeFalsy()
 	})

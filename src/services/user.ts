@@ -13,7 +13,7 @@ export const updateUser = async (data: IUserUpdateData): Promise<IUser | null> =
 		'IUserUpdateData',
 		'IUserUpdate'
 	)
-	const user = await UserModel.findOneAndUpdate({ username: data.txtuser }, payload, { new: true })
+	const user = await UserModel.findOneAndUpdate({ username: data.user }, payload, { new: true })
 
 	return user
 }
@@ -47,12 +47,12 @@ export const login = async (payload: IAuthUser): Promise<{ token: string; refres
 
 export const createUser = async (payload: IUserRegiser): Promise<IUser> => {
 	/* eslint-disable */
-	const { txtpass } = payload
+	const { pass } = payload
 	const str = Math.floor(Math.random() * TEN) + ONE
 
 	const data = userRegisterToUserMapper().map<IUserRegiser, IUser>(payload, 'IUserRegister', 'IUser')
 	data.str = str.toString()
-	data.password = await hash(txtpass, str)
+	data.password = await hash(pass, str)
 
 	let user = new UserModel(data)
 

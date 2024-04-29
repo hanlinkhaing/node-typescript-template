@@ -10,11 +10,11 @@ import { generateAccessToken, generateRefreshToken } from '../../utils/methods'
 let registerPayload = {
 	aff_id: '',
 	credit_rate: '100',
-	txtname: 'testuser',
-	txtpass: '123452',
-	txtpass_repeat: '123452',
-	txtphone: '08412345672',
-	txtuser: 'testuser@gmail.com'
+	name: 'testuser',
+	pass: '123452',
+	pass_repeat: '123452',
+	phone: '08412345672',
+	user: 'testuser@gmail.com'
 }
 let mongoServer
 
@@ -44,15 +44,15 @@ describe('users/profile', () => {
 	let loginToken
 
 	beforeEach(async () => {
-		await UserModel.findOneAndDelete({ username: registerPayload.txtuser })
+		await UserModel.findOneAndDelete({ username: registerPayload.user })
 		await createUser(registerPayload)
 		loginToken = generateAccessToken(authUser)
 	})
 
 	const updateData = {
-		txtuser: 'testuser@gmail.com',
-		txtphone: '213454566',
-		txtname: 'PikaPika3'
+		user: 'testuser@gmail.com',
+		phone: '213454566',
+		name: 'PikaPika3'
 	}
 
 	test('should return 200 with updated data for success process', async () => {
@@ -62,12 +62,12 @@ describe('users/profile', () => {
 			.send(updateData)
 
 		expect(statusCode).toBe(200)
-		expect(body.data.fullname).toBe(updateData.txtname)
-		expect(body.data.phone).toBe(updateData.txtphone)
+		expect(body.data.fullname).toBe(updateData.name)
+		expect(body.data.phone).toBe(updateData.phone)
 	})
 
-	test("should return 401 when token's username and payload txtuser are not same", async () => {
-		updateData.txtuser = 'wrong@gmail.com'
+	test("should return 401 when token's username and payload user are not same", async () => {
+		updateData.user = 'wrong@gmail.com'
 
 		const { statusCode } = await supertest(app)
 			.put('/users/profile')
@@ -89,7 +89,7 @@ describe('users/refreshToken', () => {
 	})
 
 	afterAll(async () => {
-		await UserModel.findOneAndDelete({ username: registerPayload.txtuser })
+		await UserModel.findOneAndDelete({ username: registerPayload.user })
 		await mongoose.disconnect()
 		await mongoose.connection.close()
 		if (mongoServer) await mongoServer.stop()
@@ -143,7 +143,7 @@ describe('users/checkUserExists', () => {
 	})
 
 	test("username doesn't exist and should return status 200 with isExisted false", async () => {
-		await UserModel.findOneAndDelete({ username: registerPayload.txtuser })
+		await UserModel.findOneAndDelete({ username: registerPayload.user })
 
 		const { statusCode, body } = await supertest(app).post('/users/checkUserExists').send(payload)
 
@@ -168,7 +168,7 @@ describe('users/login', () => {
 	})
 
 	afterAll(async () => {
-		await UserModel.findOneAndDelete({ username: registerPayload.txtuser })
+		await UserModel.findOneAndDelete({ username: registerPayload.user })
 		await mongoose.disconnect()
 		await mongoose.connection.close()
 		if (mongoServer) await mongoServer.stop()
@@ -211,19 +211,19 @@ describe('users/register', () => {
 	})
 
 	beforeEach(async () => {
-		await UserModel.findOneAndDelete({ username: registerPayload.txtuser })
+		await UserModel.findOneAndDelete({ username: registerPayload.user })
 	})
 
 	test('give executable data and then should return status 200 with user data', async () => {
 		const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 
 		expect(statusCode).toBe(200)
-		expect(body.data.username).toBe(registerPayload.txtuser)
+		expect(body.data.username).toBe(registerPayload.user)
 	})
 
 	describe('username validation', () => {
 		afterEach(() => {
-			registerPayload.txtuser = 'testuser@gmail.com'
+			registerPayload.user = 'testuser@gmail.com'
 		})
 
 		test('give executable data and username is already existed', async () => {
@@ -235,16 +235,16 @@ describe('users/register', () => {
 			expect(body.message).toBe('Username is already taken by another account.')
 		})
 
-		test('give null to txtuser ', async () => {
-			registerPayload.txtuser = null
+		test('give null to user ', async () => {
+			registerPayload.user = null
 
 			const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
 			expect(body.message).toBe('Username should be a type of string.')
 		})
 
-		test('give empty string to txtuser ', async () => {
-			registerPayload.txtuser = ''
+		test('give empty string to user ', async () => {
+			registerPayload.user = ''
 
 			const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
@@ -254,35 +254,35 @@ describe('users/register', () => {
 
 	describe('fullname validation', () => {
 		afterEach(() => {
-			registerPayload.txtname = 'testuser'
+			registerPayload.name = 'testuser'
 		})
 
-		test('give null to txtname ', async () => {
-			registerPayload.txtname = null
+		test('give null to name ', async () => {
+			registerPayload.name = null
 
 			const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
 			expect(body.message).toBe('Fullname must be a type of string.')
 		})
 
-		test('give empty string to txtname ', async () => {
-			registerPayload.txtname = ''
+		test('give empty string to name ', async () => {
+			registerPayload.name = ''
 
 			const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
 			expect(body.message).toBe('Fullname required.')
 		})
 
-		test('give only 1 character to txtname ', async () => {
-			registerPayload.txtname = 'a'
+		test('give only 1 character to name ', async () => {
+			registerPayload.name = 'a'
 
 			const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
 			expect(body.message).toBe('Fullname must have at least 2 characters.')
 		})
 
-		test('give a string with special character to txtname ', async () => {
-			registerPayload.txtname = 'testuser@'
+		test('give a string with special character to name ', async () => {
+			registerPayload.name = 'testuser@'
 
 			const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
@@ -292,32 +292,32 @@ describe('users/register', () => {
 
 	describe('password validation', () => {
 		afterEach(() => {
-			registerPayload.txtpass = '123452'
+			registerPayload.pass = '123452'
 		})
 
-		test('give null to txtpass ', async () => {
-			registerPayload.txtpass = null
+		test('give null to pass ', async () => {
+			registerPayload.pass = null
 
 			const { statusCode } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
 		})
 
-		test('give empty string to txtpass ', async () => {
-			registerPayload.txtpass = ''
+		test('give empty string to pass ', async () => {
+			registerPayload.pass = ''
 
 			const { statusCode } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
 		})
 
-		test('give a string with space to txtpass ', async () => {
-			registerPayload.txtpass = '1234 5678'
+		test('give a string with space to pass ', async () => {
+			registerPayload.pass = '1234 5678'
 
 			const { statusCode } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
 		})
 
-		test('give only 5 characters to txtpass ', async () => {
-			registerPayload.txtpass = null
+		test('give only 5 characters to pass ', async () => {
+			registerPayload.pass = null
 
 			const { statusCode } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
@@ -326,11 +326,11 @@ describe('users/register', () => {
 
 	describe('repeat passwrod validation', () => {
 		afterEach(() => {
-			registerPayload.txtpass_repeat = '123452'
+			registerPayload.pass_repeat = '123452'
 		})
 
-		test('give different txtpass_repeat from txtpass ', async () => {
-			registerPayload.txtpass_repeat = '254321'
+		test('give different pass_repeat from pass ', async () => {
+			registerPayload.pass_repeat = '254321'
 
 			const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
@@ -338,13 +338,13 @@ describe('users/register', () => {
 		})
 	})
 
-	describe('txtphone validation', () => {
+	describe('phone validation', () => {
 		afterEach(() => {
-			registerPayload.txtphone = '08412345672'
+			registerPayload.phone = '08412345672'
 		})
 
 		test('give a phone number with less than 8 digit', async () => {
-			registerPayload.txtphone = '084123'
+			registerPayload.phone = '084123'
 
 			const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
@@ -352,7 +352,7 @@ describe('users/register', () => {
 		})
 
 		test('give a phone number with more than 14 digit', async () => {
-			registerPayload.txtphone = '0841231213324343434'
+			registerPayload.phone = '0841231213324343434'
 
 			const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
@@ -360,7 +360,7 @@ describe('users/register', () => {
 		})
 
 		test('give a phone number with an alphabet', async () => {
-			registerPayload.txtphone = '084123121a'
+			registerPayload.phone = '084123121a'
 
 			const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
@@ -368,7 +368,7 @@ describe('users/register', () => {
 		})
 
 		test('give a phone number start with +', async () => {
-			registerPayload.txtphone = '084123121a'
+			registerPayload.phone = '084123121a'
 
 			const { statusCode, body } = await supertest(app).post('/users/register').send(registerPayload)
 			expect(statusCode).toBe(400)
