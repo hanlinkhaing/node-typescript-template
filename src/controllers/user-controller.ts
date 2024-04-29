@@ -3,33 +3,36 @@ import HttpStatus from 'http-status-codes'
 import { RESPONSE_STATUS } from '../utils/enums'
 import HttpErrors from 'http-errors'
 import {
-	createCustomer,
-	login as customerLogin,
-	checkCustomerExists,
+	createUser,
+	login as userLogin,
+	checkUserExists as checkUserIsExists,
 	refreshAccessToken,
-	updateCustomer
-} from '../services/customer'
+	updateUser
+} from '../services/user'
 import { Logger } from '../services/logger'
-import { IAuthCustomer, ICustomerUpdateData } from '../interfaces/customer-interfaces'
+import { IAuthUser, IUserUpdateData } from '../interfaces/user-interfaces'
 
 export const updateUserProfile = async (req: Request, res: Response, next: NextFunction) => {
-	const payload = req.body as ICustomerUpdateData
+	const payload = req.body as IUserUpdateData
 	const { username } = req.user as { username: string }
 
-	if (username !== payload.txtuser) next(HttpErrors(HttpStatus.UNAUTHORIZED, "You cannot update other person's data."))
-
+	console.log('username !== payload.txtuser', username, ' ', payload.txtuser, ' ', username !== payload.txtuser)
+	if (username !== payload.txtuser)
+		return next(HttpErrors(HttpStatus.UNAUTHORIZED, "You cannot update other person's data."))
+	console.log('passed')
 	try {
-		const customer = await updateCustomer(payload)
+		const user = await updateUser(payload)
 
-		if (customer === null) next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, 'Return null while updating user data.'))
+		if (user === null)
+			return next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, 'Return null while updating user data.'))
 
 		return res.status(HttpStatus.OK).send({
 			status: RESPONSE_STATUS.SUCCESS,
-			data: customer
+			data: user
 		})
 	} catch (err: any) {
 		Logger.error(err)
-		next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, err))
+		return next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, err))
 	}
 }
 
@@ -44,13 +47,13 @@ export const refreshToken = async (req: Request, res: Response, next: NextFuncti
 		})
 	} catch (err: any) {
 		Logger.error(err)
-		next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, err))
+		return next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, err))
 	}
 }
 
 export const checkUserExists = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const isExisted = await checkCustomerExists(req.body.username)
+		const isExisted = await checkUserIsExists(req.body.username)
 
 		return res.status(HttpStatus.OK).send({
 			status: RESPONSE_STATUS.SUCCESS,
@@ -58,31 +61,31 @@ export const checkUserExists = async (req: Request, res: Response, next: NextFun
 		})
 	} catch (err: any) {
 		Logger.error(err)
-		next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, err))
+		return next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, err))
 	}
 }
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const customer = await createCustomer(req.body)
+		const user = await createUser(req.body)
 
 		return res.status(HttpStatus.OK).send({
 			status: RESPONSE_STATUS.SUCCESS,
-			data: customer
+			data: user
 		})
 	} catch (err: any) {
 		Logger.error(err)
-		next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, err))
+		return next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, err))
 	}
 }
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const authCustomer = req.user as IAuthCustomer
-		if (!authCustomer || !authCustomer.username) {
+		const authUser = req.user as IAuthUser
+		if (!authUser || !authUser.username) {
 			return next(HttpErrors(HttpStatus.UNAUTHORIZED, 'Unauthorized.'))
 		}
-		const tokens = await customerLogin(authCustomer)
+		const tokens = await userLogin(authUser)
 
 		return res.status(HttpStatus.OK).send({
 			status: RESPONSE_STATUS.SUCCESS,
@@ -90,6 +93,6 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 		})
 	} catch (err: any) {
 		Logger.error(err)
-		next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, err))
+		return next(HttpErrors(HttpStatus.INTERNAL_SERVER_ERROR, err))
 	}
 }

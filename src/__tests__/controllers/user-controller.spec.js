@@ -1,13 +1,7 @@
 import { describe, test, vi, expect, afterEach, beforeEach } from 'vitest'
-import {
-	checkUserExists,
-	login,
-	refreshToken,
-	register,
-	updateUserProfile
-} from '../../controllers/customer-controller'
+import { checkUserExists, login, refreshToken, register, updateUserProfile } from '../../controllers/user-controller'
 
-vi.mock('../../services/customer')
+vi.mock('../../services/user')
 const response = {
 	statusCode: 0,
 	status: vi.fn(function (number) {

@@ -6,7 +6,6 @@ import type { HttpError } from 'http-errors'
 import { Logger } from './services/logger'
 import './services/cache'
 import './mongoose'
-import './seeds'
 
 function normalizePort(val: string): number {
 	const port = parseInt(val, TEN)

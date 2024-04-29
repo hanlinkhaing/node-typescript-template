@@ -1,8 +1,8 @@
 import Joi from 'joi'
-import CustomerModel from '../models/customer-model'
-import { ICustomerRegiser, ICustomerLogin, ICustomerUpdateData } from '../interfaces/customer-interfaces'
+import UserModel from '../models/user-model'
+import { IUserRegiser, IUserLogin, IUserUpdateData } from '../interfaces/user-interfaces'
 
-export const CustomerUpdateSchema: Joi.ObjectSchema = Joi.object<{ body: ICustomerUpdateData }>({
+export const UserUpdateSchema: Joi.ObjectSchema = Joi.object<{ body: IUserUpdateData }>({
 	body: Joi.object({
 		txtuser: Joi.string().required().messages({
 			'string.base': 'Username should be a type of string.',
@@ -25,18 +25,11 @@ export const CustomerUpdateSchema: Joi.ObjectSchema = Joi.object<{ body: ICustom
 			.message('Phone must a string of digits with 8 to 14 characters in length')
 			.messages({
 				'string.empty': 'txtphone required.'
-			}),
-		txtphone2: Joi.string()
-			.allow(null, '')
-			.pattern(/^(\+{0,1})([0-9]{8,14})$/)
-			.message('Phone 2 must a string of digits(allowed +) with 8 to 14 characters in length')
-			.messages({
-				'string.empty': 'txtphone2 required.'
 			})
 	}).unknown()
 }).unknown()
 
-export const CustomerCheckSchema: Joi.ObjectSchema = Joi.object<{ body: { username: string } }>({
+export const UserCheckSchema: Joi.ObjectSchema = Joi.object<{ body: { username: string } }>({
 	body: Joi.object({
 		username: Joi.string().required().messages({
 			'string.base': 'Username must be a type of string.',
@@ -45,7 +38,7 @@ export const CustomerCheckSchema: Joi.ObjectSchema = Joi.object<{ body: { userna
 	})
 }).unknown()
 
-export const CustomerLoginScheam: Joi.ObjectSchema = Joi.object<{ body: ICustomerLogin }>({
+export const UserLoginScheam: Joi.ObjectSchema = Joi.object<{ body: IUserLogin }>({
 	body: Joi.object({
 		username: Joi.string().required().messages({
 			'string.base': 'Username must be a type of string.',
@@ -58,12 +51,12 @@ export const CustomerLoginScheam: Joi.ObjectSchema = Joi.object<{ body: ICustome
 	})
 }).unknown()
 
-export const CustomerRegisterSchema: Joi.ObjectSchema = Joi.object<{ body: ICustomerRegiser }>({
+export const UserRegisterSchema: Joi.ObjectSchema = Joi.object<{ body: IUserRegiser }>({
 	body: Joi.object({
 		txtuser: Joi.string()
 			.required()
 			.external(async (value: string, helpers: Joi.CustomHelpers) => {
-				const existed = await CustomerModel.findOne({ user: value })
+				const existed = await UserModel.findOne({ username: value })
 				if (existed) return helpers.message({ external: 'Username is already taken by another account.' })
 				return value
 			})
@@ -104,13 +97,6 @@ export const CustomerRegisterSchema: Joi.ObjectSchema = Joi.object<{ body: ICust
 			.message('Phone must a string of digits with 8 to 14 characters in length')
 			.messages({
 				'string.empty': 'txtphone required.'
-			}),
-		txtphone2: Joi.string()
-			.allow(null)
-			.pattern(/^(\+{0,1})([0-9]{8,14})$/)
-			.message('Phone 2 must a string of digits(allowed +) with 8 to 14 characters in length')
-			.messages({
-				'string.empty': 'txtphone2 required.'
 			}),
 		aff_id: Joi.optional(),
 		credit_rate: Joi.optional()

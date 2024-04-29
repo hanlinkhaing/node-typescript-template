@@ -54,11 +54,11 @@ services:
       args:
         - NODE_IMAGE_VERSION=${NODE_IMAGE_VERSION}
         - PORT=${NODE_PORT}
-    image: node-template
-    container_name: node-template
-    restart: unless-stopped
+    image: node-template-${NODE_VERSION}
+    container_name: node-template-${NODE_VERSION}
     volumes:
       - ${DATA_PATH_HOST}/log:/log
+      - ./src:/usr/node-template/src
     networks:
       - local
     ports:

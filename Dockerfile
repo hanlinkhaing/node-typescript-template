@@ -6,20 +6,21 @@ WORKDIR /usr/node-template
 
 # Add package file
 COPY package.json ./
-COPY package-lock.json ./
+COPY yarn.lock ./
 
 # Install deps
-RUN npm install
-RUN npm install -g typescript
+RUN yarn install
+RUN yarn global add typescript ts-node
 
 # Copy sources
 COPY src ./src
 COPY tsconfig.json ./tsconfig.json
-COPY .env.dev ./.env
+COPY .env.example ./.env
 
 # Build build
-RUN npm run build
+# RUN yarn build
 
 # Expose port 3000
 EXPOSE ${PORT}
-CMD [ "node", "./build/index.js" ]
+# CMD [ "node", "./build/index.js" ]
+CMD [ "yarn", "dev" ]
