@@ -1,0 +1,12 @@
+pipelines:
+  branches:
+    development:
+      - step:
+          name: Install Packages
+          script:
+            - npm install
+      - step:
+          name: Build And Testing
+          script:
+            - npm run test && npm run build
+      

@@ -1,0 +1,110 @@
+{
+  "name": "node-template",
+  "version": "1.0.0",
+  "description": "node typescript template",
+  "main": "build/index.js",
+  "scripts": {
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:js": "babel src --out-dir build --extensions \".ts\" --source-maps inline",
+    "clean": "rimraf build",
+    "build": "npm run clean && npm run build:types && npm run build:js",
+    "server": "node ./build/index.js",
+    "dev": "nodemon -L src/index.ts",
+    "prepare": "husky install",
+    "test": "vitest"
+  },
+  "nodemonConfig": {
+    "restartable": "rs",
+    "ignore": [
+      ".git",
+      "node_modules"
+    ],
+    "verbose": true,
+    "execMap": {
+      "ts": "ts-node"
+    },
+    "watch": [
+      "src"
+    ],
+    "ext": "ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:hanlinkhaing/node-typescript-template.git"
+  },
+  "keywords": [
+    "node",
+    "typescript",
+    "express",
+    "mongo"
+  ],
+  "author": "Han Lin Khaing",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@automapper/core": "^8.7.7",
+    "@automapper/pojos": "^8.7.7",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "http-errors": "^2.0.0",
+    "http-status-codes": "^2.2.0",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.3.4",
+    "npm-run-all": "^4.1.5",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "redis": "^4.6.7",
+    "winston": "^3.10.0",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-typescript"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-modules-commonjs"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.22.10",
+    "@babel/core": "^7.22.10",
+    "@babel/node": "^7.22.10",
+    "@babel/plugin-transform-modules-commonjs": "^7.22.5",
+    "@babel/preset-env": "^7.22.10",
+    "@babel/preset-typescript": "^7.22.5",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/body-parser": "^1.19.2",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/http-errors": "^2.0.1",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/node": "^20.4.9",
+    "@types/passport": "^1.0.12",
+    "@types/passport-jwt": "^3.0.9",
+    "@types/passport-local": "^1.0.35",
+    "@typescript-eslint/eslint-plugin": "^6.3.0",
+    "@typescript-eslint/parser": "^6.3.0",
+    "eslint": "^8.46.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.1.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "mongodb-memory-server": "^8.15.1",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.2",
+    "rimraf": "^5.0.1",
+    "supertest": "^6.3.3",
+    "typescript": "^5.1.6",
+    "vitest": "^0.34.2"
+  },
+  "lint-staged": {
+    "*.ts": "npx eslint --cache --fix"
+  }
+}

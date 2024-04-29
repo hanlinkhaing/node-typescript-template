@@ -1,0 +1,66 @@
+version: '3.8'
+
+networks:
+  local:
+    name: local
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.10.0.0/16
+          gateway: 172.10.0.1
+
+services:
+  mongo:
+    build:
+      context: ./mongo
+      args:
+        - MONGO_VERSION=${MONGO_VERSION}
+    image: template-mongo-${MONGO_VERSION}
+    container_name: template-mongo-${MONGO_VERSION}
+    hostname: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_DB=${MONGO_DB}
+    volumes:
+      - ${DATA_PATH_HOST}/mongo:/data
+    ports:
+      - '${MONGO_HOST_PORT}:27017'
+    networks:
+      - local
+    tty: true
+
+  redis:
+    build:
+      context: ./redis
+      args:
+        - REDIS_VERSION=${REDIS_VERSION}
+    image: template-redis-${REDIS_VERSION}
+    container_name: template-redis-${REDIS_VERSION}
+    hostname: redis
+    entrypoint: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - ${DATA_PATH_HOST}/redis/data:/data
+    ports:
+      - '${REDIS_HOST_PORT}:6379'
+    networks:
+      - local
+    tty: true
+
+  node-template:
+    build:
+      context: ./
+      args:
+        - NODE_IMAGE_VERSION=${NODE_IMAGE_VERSION}
+        - PORT=${NODE_PORT}
+    image: node-template
+    container_name: node-template
+    restart: unless-stopped
+    volumes:
+      - ${DATA_PATH_HOST}/log:/log
+    networks:
+      - local
+    ports:
+      - '${NODE_PORT}:3000'
+    tty: true
