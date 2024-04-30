@@ -16,10 +16,9 @@ export const updateUserProfile = async (req: Request, res: Response, next: NextF
 	const payload = req.body as IUserUpdateData
 	const { username } = req.user as { username: string }
 
-	console.log('username !== payload.user', username, ' ', payload.user, ' ', username !== payload.user)
 	if (username !== payload.user)
 		return next(HttpErrors(HttpStatus.UNAUTHORIZED, "You cannot update other person's data."))
-	console.log('passed')
+
 	try {
 		const user = await updateUser(payload)
 
